@@ -24,5 +24,4 @@ public class Customer {
         this.Phone = Phone;
         this.Cash = Cash;
     }
-
 }
