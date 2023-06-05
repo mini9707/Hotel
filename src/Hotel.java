@@ -17,8 +17,6 @@ public class Hotel {
         // 고객으로부터 원하는 날짜 입력받기
         // 그 다음에 해당하는 날짜에 - reservationList에 없는 객실들만 출력해야 함
 
-        // Map으로 따로 저장된 key-날짜 / Room 으로 구분해서 없는 방들만 출력
-
     }
 
     // 객실 입력받는 메소드
@@ -26,16 +24,16 @@ public class Hotel {
     public Room inputRoom() {
         Room room = null;
 
-
-
         return room;
     }
 
     // 고객 정보를 입력받는 메소드
     // 고객 정보를 입력 받아서 있으면 그냥 진행하고, 없으면 고객 리스트에 추가하기
     // 그 다음에 소지금 판단하기
-    public void inputCustomer() {
+    public Customer inputCustomer() {
+        Customer customer = null;
 
+        return customer;
     }
 
     // 예약 완료 화면
@@ -51,6 +49,11 @@ public class Hotel {
     // 삭제 여부를 입력받고, 예약 번호 입력받아서 맞으면 삭제
 
     public void confirmDelete() {
+
+    }
+
+    // 호텔에서 모든 예약 목록 조회 기능
+    public void showAllReservation() {
 
     }
 
