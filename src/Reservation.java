@@ -8,6 +8,26 @@ public class Reservation {
     private Room room;
     private String customerName, phoneNumber, reservationDate, id;
 
+    public Room getRoom() {
+        return room;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getReservationDate() {
+        return reservationDate;
+    }
+
+    public String getId() {
+        return id;
+    }
+
     public Reservation(Room room, String customerName, String phoneNumber, String reservationDate) {
         this.room = room;
         this.customerName = customerName;
