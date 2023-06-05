@@ -15,6 +15,10 @@ public class Customer {
         return Cash;
     }
 
+    public void setCash(Double cash) {
+        Cash = cash;
+    }
+
     public Customer(String Name, String Phone, Double Cash) {
         this.Name = Name;
         this.Phone = Phone;
