@@ -15,10 +15,13 @@ public class Customer {
         return cash;
     }
 
+    public void setCash(Double cash) {
+        this.cash = cash;
+    }
+
     public Customer(String name, String phone, Double cash) {
         this.name = name;
         this.phone = phone;
         this.cash = cash;
     }
-
 }
