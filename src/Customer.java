@@ -1,24 +1,27 @@
 public class Customer {
 
-    private String Name, Phone;
-    private Double Cash;
+    private String name, phone;
+    private Double cash;
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public String getPhone() {
-        return Phone;
+        return phone;
     }
 
     public Double getCash() {
-        return Cash;
+        return cash;
     }
 
-    public Customer(String Name, String Phone, Double Cash) {
-        this.Name = Name;
-        this.Phone = Phone;
-        this.Cash = Cash;
+    public void setCash(Double cash) {
+        this.cash = cash;
     }
 
+    public Customer(String name, String phone, Double cash) {
+        this.name = name;
+        this.phone = phone;
+        this.cash = cash;
+    }
 }
