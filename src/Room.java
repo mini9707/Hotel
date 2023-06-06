@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Room {
-
     // 크기, 숙박비
     private String roomSize;
     private Double roomCharge;
@@ -27,5 +26,8 @@ public class Room {
         this.roomCharge = roomCharge;
     }
 
-
+    @Override
+    public String toString() {
+        return "방 이름(크기):" + this.roomSize+" , 가격: "+this.roomCharge;
+    }
 }
