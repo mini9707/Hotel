@@ -2,8 +2,7 @@ public class Main {
 
     public static void main(String[] args) {
         Hotel hotel = new Hotel();
-        hotel.init();//for test
-        hotel.showRoomList();
-
+        // 메인 메뉴 출력하기
+        hotel.showMain();
     }
 }
