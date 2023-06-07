@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class Hotel {
     // 방 리스트
@@ -84,10 +85,13 @@ public class Hotel {
         System.out.print("성함을 입력해주세요: ");
         String name = sc.nextLine();
 
-        System.out.print("전화번호를 입력해주세요: ");
-        String phone = sc.nextLine();
+        //System.out.print("전화번호를 입력해주세요: ");
+        //String phone = sc.nextLine();
+        String phone =InputPhoneCheck();
 
-        System.out.print("소지금을 입력해주세요: ");
+
+
+        System.out.print("소지금을 입력해주세요: ※1은 1만원을 의미합니다.");
         Double cash = sc.nextDouble();
 
         Customer customer = new Customer(name, phone, cash);
@@ -144,8 +148,9 @@ public class Hotel {
         // 고객의 성함과 전화번호를 우선 입력받는다.
         System.out.print("성함을 입력해주세요: ");
         String name = sc.nextLine();
-        System.out.print("전화번호를 입력해주세요: ");
-        String phoneNumber = sc.nextLine();
+        //System.out.print("전화번호를 입력해주세요: ");
+        //String phoneNumber = sc.nextLine();
+        String phoneNumber=InputPhoneCheck();
         // 고객이 리스트에 존재할 지 판단하는 boolean 타입의 필드 선언
         boolean custo = false;
         // 고객 리스트에 해당 고객이 존재하는지 판단
@@ -276,6 +281,15 @@ public class Hotel {
             System.out.println("잘못된 메뉴입니다.");
         }
     } // showCustomerMenu()
-
-
+    private String InputPhoneCheck(){ //전화번호 정규표현식
+        Scanner scan=new Scanner(System.in);
+        System.out.print("전화번호를 입력해주세요 ex)000-0000-0000 : ");
+        String inputPhone=scan.nextLine();
+        String pattern = "^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}$"; // 숫자만 등장하는지
+        if(!Pattern.matches(pattern, inputPhone)){
+            System.out.println("올바른 전화번호 형식이 아닙니다. 다시 입력해주세요");
+            InputPhoneCheck();
+        }
+        return inputPhone;
+    }
 }
