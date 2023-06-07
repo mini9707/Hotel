@@ -298,7 +298,7 @@ public class Hotel {
             }
         }
     } // showHotelMenu()
-    
+
     // 호텔의 관리자 비밀번호를 수정하는 메소드
     public void setPassword() {
         System.out.print("비밀번호를 수정하시겠습니까? (예/아니오): ");
@@ -391,4 +391,4 @@ public class Hotel {
             System.out.println("올바른 전화번호 형식이 아닙니다. 다시 입력해주세요");
         }
     } // InputPhoneCheck()
-}
+} // Hotel.java
