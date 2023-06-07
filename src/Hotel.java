@@ -38,26 +38,34 @@ public class Hotel {
     // 예약 날짜를 리턴
     // 형철님
     public String showRoomList() {
+        String resDate = null;
+        LocalDate today = LocalDate.now();
         // 오늘 날짜 출력(iso 8601에 따라 표현된 날짜)
         System.out.println("오늘은 " + LocalDate.now() + "입니다.");
         // 고객으로부터 원하는 날짜 입력받기
         Scanner scan = new Scanner(System.in);
         //yyyy년 MM월 dd일 타입으로 입력받기
-        System.out.println("yyyy-MM-dd 형태로 원하시는 날짜를 입력해주세요. 예: 2023-06-05 ");
-        String pattern="\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])";
-        String resDate = scan.nextLine();
-        if(!Pattern.matches(pattern,resDate)){
-            System.out.println("날짜 형식이 올바르지 않습니다.");
-            showRoomList();
-        }
-
-        System.out.println("방이름  |  가격");
-        for(Room room:roomList){
-            if(!room.getDateList().contains(resDate)){
-                System.out.printf("%-15s | %.1f\n",room.getRoomSize(),room.getRoomCharge());
+        String pattern = "\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])";
+        while (true) {
+            System.out.println("yyyy-MM-dd 형태로 원하시는 날짜를 입력해주세요. 예: 2023-06-05 ");
+            resDate = scan.nextLine();
+            if (Pattern.matches(pattern, resDate)) { //날짜 형식 체크
+                LocalDate reservationDate = LocalDate.parse(resDate);
+                int compare = reservationDate.compareTo(today);
+                if (compare < 0) {
+                    System.out.println("오늘 이전의 날은 입력하실 수 없습니다.");
+                    continue;
+                }
+                System.out.printf("%-13s | %s\n", "방 이름", "가격(만원)");
+                for (Room room : roomList) {
+                    if (!room.getDateList().contains(resDate)) {
+                        System.out.printf("%-15s | %.1f\n", room.getRoomSize(), room.getRoomCharge());
+                    }
+                }
+                break;
             }
+            System.out.println("날짜 형식이 올바르지 않습니다.");
         }
-        // 그 다음에 해당하는 날짜에 - reservationList에 없는 객실들만 출력해야 함
         return resDate;
     }
 
@@ -69,13 +77,13 @@ public class Hotel {
         System.out.println("예약하실 객실을 입력해주세요 ex)FAMILY_SUITE");
         String roomType = scanner.nextLine();
         boolean a = false;
-        for(Room room : roomList){
+        for (Room room : roomList) {
             a = room.getRoomSize().equals(roomType);
-            if (a){
+            if (a) {
                 return room;
             }
         }
-        if(a == false){
+        if (a == false) {
             System.out.println("잘못 입력하셨습니다");
             return inputRoom();
         }
@@ -95,7 +103,7 @@ public class Hotel {
 
         //System.out.print("전화번호를 입력해주세요: ");
         //String phone = sc.nextLine();
-        String phone =InputPhoneCheck();
+        String phone = InputPhoneCheck();
 
         System.out.print("소지금을 입력해주세요 ※1은 1만원을 의미합니다. :  ");
         Double cash = sc.nextDouble();
@@ -135,8 +143,8 @@ public class Hotel {
         System.out.println();
         System.out.println("------ 예약 완료 페이지 ------");
         Reservation reservation = null;
-        if (customer != null){
-            reservation = new Reservation(room, customer.getName(), customer.getPhone(),date);
+        if (customer != null) {
+            reservation = new Reservation(room, customer.getName(), customer.getPhone(), date);
             reservationList.add(reservation);
             room.setDateList(date);
             System.out.println("예약이 완료되었습니다.");
@@ -158,11 +166,11 @@ public class Hotel {
         String name = sc.nextLine();
         //System.out.print("전화번호를 입력해주세요: ");
         //String phoneNumber = sc.nextLine();
-        String phoneNumber=InputPhoneCheck();
+        String phoneNumber = InputPhoneCheck();
         // 고객이 리스트에 존재할 지 판단하는 boolean 타입의 필드 선언
         boolean custo = false;
         // 고객 리스트에 해당 고객이 존재하는지 판단
-        for (Customer customer:customerList) {
+        for (Customer customer : customerList) {
             if (customer.getName().equals(name) && customer.getPhone().equals(phoneNumber)) {
                 custo = true;
             }
@@ -170,18 +178,18 @@ public class Hotel {
         // 고객이 존재한다면,
         if (custo) {
             Integer count = 0;
-            for (Reservation reservation:reservationList) {
+            for (Reservation reservation : reservationList) {
                 if (reservation.getCustomerName().equals(name) && reservation.getPhoneNumber().equals(phoneNumber)) {
-                    count += 1 ;
+                    count += 1;
                 } // if문 종료
             } // for문 종료
 
             if (count > 0) {
-                System.out.println(name +"님의 예약 내역을 출력합니다.");
+                System.out.println(name + "님의 예약 내역을 출력합니다.");
                 // 예약 리스트에서 예약 내역 출력하기
-                for (Reservation reservation:reservationList) {
+                for (Reservation reservation : reservationList) {
                     if (reservation.getCustomerName().equals(name) && reservation.getPhoneNumber().equals(phoneNumber)) {
-                        System.out.printf("%-4s | %-10s | %s | %s\n", reservation.getCustomerName(), reservation.getRoom().getRoomSize(), reservation.getReservationDate(), reservation.getId() );
+                        System.out.printf("%-4s | %-10s | %s | %s\n", reservation.getCustomerName(), reservation.getRoom().getRoomSize(), reservation.getReservationDate(), reservation.getId());
                     } // if문 종료
                 } // for문 종료
 
@@ -205,6 +213,7 @@ public class Hotel {
             showCustomerMenu();
         }
     }
+
     // 예약을 삭제하는 메소드
     public void deleteReservation() {
         Scanner sc = new Scanner(System.in);
@@ -215,7 +224,7 @@ public class Hotel {
             String reservationNum = sc.nextLine();
             Boolean yesOrNo = false;
             Reservation r = null;
-            for (Reservation reservation:reservationList) {
+            for (Reservation reservation : reservationList) {
                 if (reservation.getId().equals(reservationNum)) {
                     r = reservation;
                     yesOrNo = true;
@@ -251,8 +260,6 @@ public class Hotel {
             String inputPassword = sc.nextLine();
 
             if (inputPassword.equals(password)) {
-                if (!reservationList.isEmpty()){
-                    System.out.println("호텔 예약 리스트입니다. ");
                 for (Reservation r : reservationList) {
                     System.out.printf("%s | %-4.1f | %-5s | %12s | %10s | %s\n", r.getRoom().getRoomSize(), r.getRoom().getRoomCharge(), r.getCustomerName(), r.getPhoneNumber(), r.getReservationDate(), r.getId());
 //                    System.out.println(r.getRoom().getRoomSize()+r.getRoom().getRoomCharge()+r.getCustomerName()+r.getPhoneNumber()+r.getReservationDate()+r.getId());
@@ -345,7 +352,7 @@ public class Hotel {
                 showCustomerMenu();
             } else if (menu.equals("호텔") || menu.equals("2")) {
                 showHotelMenu();
-            } else if (menu.equals("종료") || menu.equals("3")){
+            } else if (menu.equals("종료") || menu.equals("3")) {
                 System.out.println("불좀꺼조 호텔 예약 프로그램을 종료합니다.");
                 break;
             } else {
@@ -378,17 +385,17 @@ public class Hotel {
             System.out.println("잘못된 메뉴입니다.");
         }
     } // showCustomerMenu()
-    
-    // 전화번호 
-    private String InputPhoneCheck(){ //전화번호 정규표현식
-        Scanner scan=new Scanner(System.in);
-        System.out.print("전화번호를 입력해주세요 ex)000-0000-0000 : ");
-        String inputPhone=scan.nextLine();
+
+    // 전화번호
+    private String InputPhoneCheck() { //전화번호 정규표현식
+        Scanner scan = new Scanner(System.in);
         String pattern = "^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}$"; // 숫자만 등장하는지
-        if(!Pattern.matches(pattern, inputPhone)){
+        while (true) {
+            System.out.print("전화번호를 입력해주세요 ex)000-0000-0000 : ");
+            String inputPhone = scan.nextLine();
+            if (Pattern.matches(pattern, inputPhone))
+                return inputPhone;
             System.out.println("올바른 전화번호 형식이 아닙니다. 다시 입력해주세요");
-            inputPhone=InputPhoneCheck();
         }
-        return inputPhone;
     } // InputPhoneCheck()
 }
