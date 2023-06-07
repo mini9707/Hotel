@@ -336,7 +336,6 @@ public class Hotel {
 
     // 첫 화면에서 메뉴들을 출력하는 메소드
     public void showMain() {
-
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.println("-----메인 메뉴-----");
