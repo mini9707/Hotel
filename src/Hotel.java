@@ -3,14 +3,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.SynchronousQueue;
 
 public class Hotel {
     // 방 리스트
     private List<Room> roomList = new ArrayList<>();
+    private String password = "1234";
 
-    //Test Input용 메서드(삭제해야대)
-    //CHARGE 단위 1.0*10000
+    // 객실 리스트
+    // CHARGE 단위 1.0*10000
     public void init() {
         roomList = Arrays.asList(
                 new Room("STANDARD_TWIN", 9.0),
@@ -33,32 +33,45 @@ public class Hotel {
 
     // 객실 리스트 출력하는 메소드
     // 예약하고 싶은 날짜를 입력 받기
+    // 예약 날짜를 리턴
     // 형철님
-    public void showRoomList() {
+    public String showRoomList() {
         // 오늘 날짜 출력(iso 8601에 따라 표현된 날짜)
         System.out.println("오늘은 " + LocalDate.now() + "입니다.");
         // 고객으로부터 원하는 날짜 입력받기
         Scanner scan = new Scanner(System.in);
         //yyyy년 MM월 dd일 타입으로 입력받기
         System.out.println("yyyy-MM-dd 형태로 원하시는 날짜를 입력해주세요. 예: 2023-06-05 ");
-        String date = scan.nextLine();
+        String resDate = scan.nextLine();
         for(Room room:roomList){
-            if(!room.getReservationList().contains(date)){
+            if(!room.getDateList().contains(resDate)){
                 System.out.println(room.toString());
             }
         }
         // 그 다음에 해당하는 날짜에 - reservationList에 없는 객실들만 출력해야 함
-
+        return resDate;
     }
 
     // 객실 입력받는 메소드
     // 입력받아서 다음 메소드인 고객 정보를 입력 받을 때 Room 타입의 필드를 넘겨줌
     // 병민님
     public Room inputRoom() {
-        Room room = null;
-
-        return room;
-    }
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("예약하실 객실을 입력해주세요 ex)FAMILY_SUITE");
+        String roomType = scanner.nextLine();
+        boolean a = false;
+        for(Room room : roomList){
+            a = room.getRoomSize().equals(roomType);
+            while(a){
+                return room;
+            }
+        }
+        if(a == false){
+            System.out.println("잘못 입력하셨습니다");
+            inputRoom();
+        }
+        return null;
+    } // inputRoom()
 
     // 고객 정보를 입력받는 메소드
     // 고객 정보를 입력 받아서 있으면 그냥 진행하고, 없으면 고객 리스트에 추가하기
@@ -74,7 +87,7 @@ public class Hotel {
         System.out.print("전화번호를 입력해주세요: ");
         String phone = sc.nextLine();
 
-        System.out.print("소지금를 입력해주세요: ");
+        System.out.print("소지금을 입력해주세요: ");
         Double cash = sc.nextDouble();
 
         Customer customer = new Customer(name, phone, cash);
@@ -108,9 +121,20 @@ public class Hotel {
     // 예약 번호를 반환 (uuid)
     // 예약 리스트 안에 Reservation (객실과 고객이름과 고객전화번호, 예약날짜, 예약번호) 저장하기
     // 푸름님
-    public void reservationComplete() {
-
-    }
+    public void reservationComplete(Room room, Customer customer, String date) {
+        System.out.println();
+        System.out.println("------ 예약 완료 페이지 ------");
+        Reservation reservation = null;
+        if (customer != null){
+            reservation = new Reservation(room, customer.getName(), customer.getPhone(),date);
+            reservationList.add(reservation);
+            room.setDateList(date);
+            System.out.println("예약이 완료되었습니다.");
+            System.out.println("고객님의 예약 번호는 " + reservation.getId() + "입니다.");
+        } else {
+            System.out.println("예약이 완료되지 않았습니다. 메인 화면으로 돌아갑니다.");
+        }
+    } // reservationComplete()
 
     // 예약 확인 & 식제
     // 이름만 전화번호를 입력받고 고객 리스트에서 판별하기
@@ -134,16 +158,36 @@ public class Hotel {
         }
         // 고객이 존재한다면,
         if (custo) {
-            System.out.println(name +"님의 예약 내역을 출력합니다.");
-            // 예약 리스트에서 예약 내역 출력하기
+            Integer count = 0;
             for (Reservation reservation:reservationList) {
                 if (reservation.getCustomerName().equals(name) && reservation.getPhoneNumber().equals(phoneNumber)) {
-                    System.out.printf("%-4s | %-10s | %s | %s", reservation.getCustomerName(), reservation.getRoom().getRoomSize(), reservation.getReservationDate(), reservation.getId() );
+                    count += 1 ;
                 } // if문 종료
             } // for문 종료
 
-            deleteReservation();
-        // 고객이 존재하지 않는다면,
+            if (count > 0) {
+                System.out.println(name +"님의 예약 내역을 출력합니다.");
+                // 예약 리스트에서 예약 내역 출력하기
+                for (Reservation reservation:reservationList) {
+                    if (reservation.getCustomerName().equals(name) && reservation.getPhoneNumber().equals(phoneNumber)) {
+                        System.out.printf("%-4s | %-10s | %s | %s", reservation.getCustomerName(), reservation.getRoom().getRoomSize(), reservation.getReservationDate(), reservation.getId() );
+                    } // if문 종료
+                } // for문 종료
+
+                deleteReservation();
+            } else {
+                System.out.println("고객님의 예약 내역이 존재하지 않습니다.");
+                System.out.println("3초 후 고객 메뉴로 돌아갑니다.");
+                try {
+                    Thread.sleep(3000);
+                    showCustomerMenu();
+                } catch (InterruptedException e) {
+                    System.out.println(e.getMessage());
+                }
+
+            }
+
+            // 고객이 존재하지 않는다면,
         } else {
             System.out.println("고객님의 정보가 존재하지 않습니다.");
             System.out.println("고객 메뉴로 돌아갑니다\n");
@@ -153,16 +197,16 @@ public class Hotel {
     // 예약을 삭제하는 메소드
     public void deleteReservation() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("예약 내역을 삭제하시겠습니까?(예/아니오): ");
+        System.out.println("\n예약 내역을 삭제하시겠습니까?(예/아니오): ");
         String yesNo = sc.nextLine();
         if (yesNo.equals("예")) {
             System.out.print("예약 번호를 입력해주세요: ");
             String reservationNum = sc.nextLine();
             Boolean yesOrNo = false;
-
+            Reservation r = null;
             for (Reservation reservation:reservationList) {
                 if (reservation.getId().equals(reservationNum)) {
-                    reservationList.remove(reservation);
+                    r = reservation;
                     yesOrNo = true;
                 } // if문 종료
             } // for문 종료
@@ -170,6 +214,9 @@ public class Hotel {
             if (!yesOrNo) {
                 System.out.println("잘못된 예약 번호입니다.");
             } else {
+                reservationList.remove(r);
+                Room removeroom = r.getRoom();
+                removeroom.getDateList().remove(r.getReservationDate());
                 System.out.println("예약이 삭제되었습니다.");
             }
 
@@ -180,18 +227,94 @@ public class Hotel {
             System.out.println("잘못 입력하셨습니다. 고객 메뉴로 돌아갑니다.");
             showCustomerMenu();
         }
-    }
+    } // deleteReservation()
 
     // 호텔에서 모든 예약 목록 조회 기능
     // 푸름님
     public void showAllReservation() {
+        System.out.println("관리자 비밀번호를 입력해주세요: ");
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            String inputPassword = sc.nextLine();
 
+            System.out.println("호텔 예약 리스트입니다. ");
+            if (inputPassword.equals(password)) {
+                for (Reservation r:reservationList){
+                    System.out.println(r.getRoom().getRoomSize()+r.getRoom().getRoomCharge()+r.getCustomerName()+r.getPhoneNumber()+r.getReservationDate()+r.getId());
+                }
+                break;
+            } else {
+                System.out.println("다시 입력해주세요.");
+            }
+        } // while()
+        System.out.println("메인 메뉴로 돌아갑니다.");
+        showMain();
+    } // showAllReservation()
+
+    public void showHotelMenu() {
+        System.out.println();
+        System.out.println("------ 호텔 페이지 ------\n");
+        System.out.println("관리자 비밀번호를 입력해주세요: ");
+        Scanner sc = new Scanner(System.in);
+        String inputPassword = sc.nextLine();
+
+        if (inputPassword.equals(password)) {
+            System.out.println("1. 호텔 예약 리스트");
+            System.out.println("2. 관리자 비밀번호 수정");
+            System.out.print("메뉴를 입력해주세요: ");
+            String inputMenu = sc.nextLine();
+
+            if (inputMenu.equals("1") || "호텔 예약 리스트".contains(inputMenu)) {
+                showAllReservation();
+            } else if (inputMenu.equals("2") || "관리자 비밀번호 수정".contains(inputMenu)) {
+                setPassword();
+            }
+        } else {
+            System.out.println("비밀번호가 틀렸습니다.");
+            System.out.println("3초 후 메인 메뉴로 돌아갑니다.");
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    public void setPassword() {
+        System.out.print("비밀번호를 수정하시겠습니까? (예/아니오): ");
+        Scanner sc = new Scanner(System.in);
+
+        String yesno = sc.nextLine();
+
+        if (yesno.equals("예")) {
+            System.out.print("비밀번호를 다시 한 번 입력해주세요: ");
+            String newPW = sc.nextLine();
+
+            if (newPW.equals(password)) {
+                System.out.print("수정할 비밀번호를 입력해주세요: ");
+                String newsetPW = sc.nextLine();
+                this.password = newsetPW;
+            } else {
+                System.out.println("비밀번호가 틀렸습니다.");
+            }
+
+            System.out.println("비밀번호가 변경되었습니다.");
+        } else {
+            System.out.println("3초 후 메인 메뉴로 돌아갑니다.");
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     // 첫 화면에서 메뉴들을 출력하는 메소드
     public void showMain() {
+
         Scanner sc = new Scanner(System.in);
         while (true) {
+            System.out.println("-----메인 메뉴-----");
             System.out.println("1. 고객");
             System.out.println("2. 호텔");
 
@@ -201,7 +324,7 @@ public class Hotel {
             if (menu.equals("고객") || menu.equals("1")) {
                 showCustomerMenu();
             } else if (menu.equals("호텔") || menu.equals("2")) {
-                showAllReservation();
+                showHotelMenu();
             } else {
                 System.out.println("잘못된 메뉴입니다.");
             }
@@ -215,17 +338,24 @@ public class Hotel {
         System.out.println("--------고객 페이지--------");
         System.out.println("1. 예약하기");
         System.out.println("2. 예약 내역 확인하기 & 삭제하기");
+        System.out.println("3. 메인 메뉴로 돌아가기");
         System.out.print("메뉴를 입력해주세요: ");
         String detailMenu = sc.nextLine();
         if (detailMenu.equals("1") || detailMenu.equals("예약하기")) {
             // 객실 리스트를 출력하는 메소드 호출
-            showRoomList();
+            String date1 = showRoomList();
+            Room room1 = inputRoom();
+            Customer customer1 = inputCustomer(room1);
+            reservationComplete(room1, customer1, date1);
         } else if (detailMenu.equals("2") || "예약 내역 확인하기 & 삭제하기".contains(detailMenu)) {
             // 예약 내역 확인하기
             reservationConfirm();
+        } else if ((detailMenu.equals("3") || "메인 메뉴로 돌아가기".contains(detailMenu))) {
+            showMain();
         } else {
             System.out.println("잘못된 메뉴입니다.");
         }
     } // showCustomerMenu()
+
 
 }
