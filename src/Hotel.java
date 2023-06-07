@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class Hotel {
     // 방 리스트
     private List<Room> roomList = new ArrayList<>();
+    private String password = "1234";
 
     //Test Input용 메서드(삭제해야대)
     //CHARGE 단위 1.0*10000
@@ -43,7 +44,7 @@ public class Hotel {
         System.out.println("yyyy-MM-dd 형태로 원하시는 날짜를 입력해주세요. 예: 2023-06-05 ");
         String resDate = scan.nextLine();
         for(Room room:roomList){
-            if(!room.getReservationList().contains(resDate)){
+            if(!room.getDateList().contains(resDate)){
                 System.out.println(room.toString());
             }
         }
@@ -194,8 +195,17 @@ public class Hotel {
 
     // 호텔에서 모든 예약 목록 조회 기능
     // 푸름님
-    public void showAllReservation() {
-
+    public void reservationComplete(Room room, Customer customer, String date) {
+        System.out.println();
+        System.out.println("------ 예약 완료 페이지 ------");
+        Reservation reservation = null;
+        if (customer != null){
+            reservation = new Reservation(room, customer.getName(), customer.getPhone(),date);
+            reservationList.add(reservation);
+            room.setDateList(date);
+        }
+        System.out.println("예약이 완료되었습니다.");
+        System.out.println("고객님의 예약 번호는 " + reservation.getId() + "입니다.");
     }
 
     // 첫 화면에서 메뉴들을 출력하는 메소드
@@ -237,5 +247,21 @@ public class Hotel {
             System.out.println("잘못된 메뉴입니다.");
         }
     } // showCustomerMenu()
+    public void showAllReservation() {
+        System.out.println();
+        System.out.println("------ 호텔 페이지 ------\n");
+        System.out.println("호텔 예약 리스트입니다. ");
+        System.out.println("비밀번호를 입력해주세요: ");
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            String inputPassword = sc.nextLine();
+            if (inputPassword.equals(password)) {
+                for (Reservation r:reservationList){
+                    System.out.println(r.getRoom().getRoomSize()+r.getRoom().getRoomCharge()+r.getCustomerName()+r.getPhoneNumber()+r.getReservationDate()+r.getId());
+                }
+            }
+            System.out.println("다시 입력해주세요.");
+        }
+    }
 
 }
