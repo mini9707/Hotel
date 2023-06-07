@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.SynchronousQueue;
 
 public class Hotel {
     // 방 리스트
@@ -33,22 +32,23 @@ public class Hotel {
 
     // 객실 리스트 출력하는 메소드
     // 예약하고 싶은 날짜를 입력 받기
+    //예얄날짜를 리턴
     // 형철님
-    public void showRoomList() {
+    public String showRoomList() {
         // 오늘 날짜 출력(iso 8601에 따라 표현된 날짜)
         System.out.println("오늘은 " + LocalDate.now() + "입니다.");
         // 고객으로부터 원하는 날짜 입력받기
         Scanner scan = new Scanner(System.in);
         //yyyy년 MM월 dd일 타입으로 입력받기
         System.out.println("yyyy-MM-dd 형태로 원하시는 날짜를 입력해주세요. 예: 2023-06-05 ");
-        String date = scan.nextLine();
+        String resDate = scan.nextLine();
         for(Room room:roomList){
-            if(!room.getReservationList().contains(date)){
+            if(!room.getReservationList().contains(resDate)){
                 System.out.println(room.toString());
             }
         }
         // 그 다음에 해당하는 날짜에 - reservationList에 없는 객실들만 출력해야 함
-
+        return resDate;
     }
 
     // 객실 입력받는 메소드
@@ -153,7 +153,7 @@ public class Hotel {
             } // for문 종료
 
             deleteReservation();
-        // 고객이 존재하지 않는다면,
+            // 고객이 존재하지 않는다면,
         } else {
             System.out.println("고객님의 정보가 존재하지 않습니다.");
             System.out.println("고객 메뉴로 돌아갑니다\n");
