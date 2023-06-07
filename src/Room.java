@@ -6,7 +6,7 @@ public class Room {
     private String roomSize;
     private Double roomCharge;
     // 방마다 리스트를 만들어줌
-    private List<String> reservationList = new ArrayList<>();
+    private List<String> dateList = new ArrayList<>();
 
 
     public String getRoomSize() {
@@ -17,8 +17,11 @@ public class Room {
         return roomCharge;
     }
 
-    public List<String> getReservationList () {
-        return reservationList;
+    public List<String> getDateList () {
+        return dateList;
+    }
+    public void setDateList (String date) {
+        this.dateList.add(date);
     }
 
     Room(String roomSize, Double roomCharge) {
