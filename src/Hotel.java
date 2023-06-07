@@ -66,8 +66,8 @@ public class Hotel {
                 return room;
             }
         }
-        if(a==false){
-            System.out.println("잘못입력하셨습니다");
+        if(a == false){
+            System.out.println("잘못 입력하셨습니다");
             inputRoom();
         }
         return null;
@@ -129,10 +129,12 @@ public class Hotel {
             reservation = new Reservation(room, customer.getName(), customer.getPhone(),date);
             reservationList.add(reservation);
             room.setDateList(date);
+            System.out.println("예약이 완료되었습니다.");
+            System.out.println("고객님의 예약 번호는 " + reservation.getId() + "입니다.");
+        } else {
+            System.out.println("예약이 완료되지 않았습니다. 메인 화면으로 돌아갑니다.");
         }
-        System.out.println("예약이 완료되었습니다.");
-        System.out.println("고객님의 예약 번호는 " + reservation.getId() + "입니다.");
-    }
+    } // reservationComplete()
 
     // 예약 확인 & 식제
     // 이름만 전화번호를 입력받고 고객 리스트에서 판별하기
@@ -156,15 +158,35 @@ public class Hotel {
         }
         // 고객이 존재한다면,
         if (custo) {
-            System.out.println(name +"님의 예약 내역을 출력합니다.");
-            // 예약 리스트에서 예약 내역 출력하기
+            Integer count = 0;
             for (Reservation reservation:reservationList) {
                 if (reservation.getCustomerName().equals(name) && reservation.getPhoneNumber().equals(phoneNumber)) {
-                    System.out.printf("%-4s | %-10s | %s | %s", reservation.getCustomerName(), reservation.getRoom().getRoomSize(), reservation.getReservationDate(), reservation.getId() );
+                   count += 1 ;
                 } // if문 종료
             } // for문 종료
 
-            deleteReservation();
+            if (count > 0) {
+                System.out.println(name +"님의 예약 내역을 출력합니다.");
+                // 예약 리스트에서 예약 내역 출력하기
+                for (Reservation reservation:reservationList) {
+                    if (reservation.getCustomerName().equals(name) && reservation.getPhoneNumber().equals(phoneNumber)) {
+                        System.out.printf("%-4s | %-10s | %s | %s", reservation.getCustomerName(), reservation.getRoom().getRoomSize(), reservation.getReservationDate(), reservation.getId() );
+                    } // if문 종료
+                } // for문 종료
+
+                deleteReservation();
+            } else {
+                System.out.println("고객님의 예약 내역이 존재하지 않습니다.");
+                System.out.println("3초 후 고객 메뉴로 돌아갑니다.");
+                try {
+                    Thread.sleep(3000);
+                    showCustomerMenu();
+                } catch (InterruptedException e) {
+                    System.out.println(e.getMessage());
+                }
+
+            }
+
             // 고객이 존재하지 않는다면,
         } else {
             System.out.println("고객님의 정보가 존재하지 않습니다.");
