@@ -70,13 +70,13 @@ public class Hotel {
         boolean a = false;
         for(Room room : roomList){
             a = room.getRoomSize().equals(roomType);
-            while(a){
+            if (a){
                 return room;
             }
         }
         if(a == false){
             System.out.println("잘못 입력하셨습니다");
-            inputRoom();
+            return inputRoom();
         }
         return null;
     } // inputRoom()
