@@ -10,8 +10,8 @@ public class Hotel {
     private List<Room> roomList = new ArrayList<>();
     private String password = "1234";
 
-    //Test Input용 메서드
-    //CHARGE 단위 1.0*10000
+    // 객실 리스트
+    // CHARGE 단위 1.0*10000
     public void init() {
         roomList = Arrays.asList(
                 new Room("STANDARD_TWIN", 9.0),
@@ -30,11 +30,12 @@ public class Hotel {
     private List<Reservation> reservationList = new ArrayList<>();
     // 고객 리스트
     private List<Customer> customerList = new ArrayList<>();
+    // 호텔 자산
     private String asset;
 
     // 객실 리스트 출력하는 메소드
     // 예약하고 싶은 날짜를 입력 받기
-    //예얄날짜를 리턴
+    // 예약 날짜를 리턴
     // 형철님
     public String showRoomList() {
         // 오늘 날짜 출력(iso 8601에 따라 표현된 날짜)
@@ -95,8 +96,6 @@ public class Hotel {
         //System.out.print("전화번호를 입력해주세요: ");
         //String phone = sc.nextLine();
         String phone =InputPhoneCheck();
-
-
 
         System.out.print("소지금을 입력해주세요 ※1은 1만원을 의미합니다. :  ");
         Double cash = sc.nextDouble();
@@ -173,7 +172,7 @@ public class Hotel {
             Integer count = 0;
             for (Reservation reservation:reservationList) {
                 if (reservation.getCustomerName().equals(name) && reservation.getPhoneNumber().equals(phoneNumber)) {
-                   count += 1 ;
+                    count += 1 ;
                 } // if문 종료
             } // for문 종료
 
@@ -254,7 +253,7 @@ public class Hotel {
             System.out.println("호텔 예약 리스트입니다. ");
             if (inputPassword.equals(password)) {
                 for (Reservation r:reservationList){
-                    System.out.println(r.getRoom().getRoomSize()+" | "+r.getRoom().getRoomCharge()+" | "+r.getCustomerName()+" | "+r.getPhoneNumber()+" | "+r.getReservationDate()+" | "+r.getId());
+                    System.out.println(r.getRoom().getRoomSize()+r.getRoom().getRoomCharge()+r.getCustomerName()+r.getPhoneNumber()+r.getReservationDate()+r.getId());
                 }
                 break;
             } else {
@@ -265,10 +264,70 @@ public class Hotel {
         showMain();
     } // showAllReservation()
 
+    public void showHotelMenu() {
+        System.out.println();
+        System.out.println("------ 호텔 페이지 ------\n");
+        System.out.println("관리자 비밀번호를 입력해주세요: ");
+        Scanner sc = new Scanner(System.in);
+        String inputPassword = sc.nextLine();
+
+        if (inputPassword.equals(password)) {
+            System.out.println("1. 호텔 예약 리스트");
+            System.out.println("2. 관리자 비밀번호 수정");
+            System.out.print("메뉴를 입력해주세요: ");
+            String inputMenu = sc.nextLine();
+
+            if (inputMenu.equals("1") || "호텔 예약 리스트".contains(inputMenu)) {
+                showAllReservation();
+            } else if (inputMenu.equals("2") || "관리자 비밀번호 수정".contains(inputMenu)) {
+                setPassword();
+            }
+        } else {
+            System.out.println("비밀번호가 틀렸습니다.");
+            System.out.println("3초 후 메인 메뉴로 돌아갑니다.");
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    } // showHotelMenu()
+
+    public void setPassword() {
+        System.out.print("비밀번호를 수정하시겠습니까? (예/아니오): ");
+        Scanner sc = new Scanner(System.in);
+
+        String yesno = sc.nextLine();
+
+        if (yesno.equals("예")) {
+            System.out.print("비밀번호를 다시 한 번 입력해주세요: ");
+            String newPW = sc.nextLine();
+
+            if (newPW.equals(password)) {
+                System.out.print("수정할 비밀번호를 입력해주세요: ");
+                String newsetPW = sc.nextLine();
+                this.password = newsetPW;
+            } else {
+                System.out.println("비밀번호가 틀렸습니다.");
+            }
+
+            System.out.println("비밀번호가 변경되었습니다.");
+        } else {
+            System.out.println("3초 후 메인 메뉴로 돌아갑니다.");
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    } // setPassword()
+
     // 첫 화면에서 메뉴들을 출력하는 메소드
     public void showMain() {
+
         Scanner sc = new Scanner(System.in);
         while (true) {
+            System.out.println("-----메인 메뉴-----");
             System.out.println("1. 고객");
             System.out.println("2. 호텔");
 
@@ -278,7 +337,7 @@ public class Hotel {
             if (menu.equals("고객") || menu.equals("1")) {
                 showCustomerMenu();
             } else if (menu.equals("호텔") || menu.equals("2")) {
-                showAllReservation();
+                showHotelMenu();
             } else {
                 System.out.println("잘못된 메뉴입니다.");
             }
@@ -310,6 +369,8 @@ public class Hotel {
             System.out.println("잘못된 메뉴입니다.");
         }
     } // showCustomerMenu()
+    
+    // 전화번호 
     private String InputPhoneCheck(){ //전화번호 정규표현식
         Scanner scan=new Scanner(System.in);
         System.out.print("전화번호를 입력해주세요 ex)000-0000-0000 : ");
@@ -320,5 +381,5 @@ public class Hotel {
             inputPhone=InputPhoneCheck();
         }
         return inputPhone;
-    }
+    } // InputPhoneCheck()
 }

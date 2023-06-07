@@ -29,4 +29,5 @@ public class Room {
         this.roomSize = roomSize;
         this.roomCharge = roomCharge;
     }
+
 }
