@@ -55,9 +55,19 @@ public class Hotel {
     // 입력받아서 다음 메소드인 고객 정보를 입력 받을 때 Room 타입의 필드를 넘겨줌
     // 병민님
     public Room inputRoom() {
-        Room room = null;
-
-        return room;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("예약하실 객실을 입력해주세요 ex)FAMILY_SUITE");
+        String roomType = scanner.nextLine();
+        //제대로 입력햇는지 확인
+        for(Room room : roomList){
+            if (room.getRoomSize().contains(roomType)){
+                return room;
+            } else {
+                System.out.println("잘못입력하셨습니다.");
+                inputRoom();
+            }
+        }
+        return null;
     }
 
     // 고객 정보를 입력받는 메소드
