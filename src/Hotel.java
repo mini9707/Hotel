@@ -195,7 +195,6 @@ public class Hotel {
                 reservationList.remove(r);
                 Room removeroom = r.getRoom();
                 removeroom.getDateList().remove(r.getReservationDate());
-                yesOrNo = true;
                 System.out.println("예약이 삭제되었습니다.");
             }
 
