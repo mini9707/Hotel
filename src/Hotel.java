@@ -272,7 +272,7 @@ public class Hotel {
     // 호텔의 메뉴를 출력하는 메소드
     public void showHotelMenu() {
         System.out.println();
-        System.out.println("\n------ 호텔 페이지 ------");
+        System.out.println("------ 호텔 페이지 ------");
         System.out.println("관리자 비밀번호를 입력해주세요: ");
         Scanner sc = new Scanner(System.in);
         String inputPassword = sc.nextLine();
@@ -301,6 +301,7 @@ public class Hotel {
 
     // 호텔의 관리자 비밀번호를 수정하는 메소드
     public void setPassword() {
+        System.out.println("\n------ 관리자 비밀번호 수정 페이지 ------");
         System.out.print("비밀번호를 수정하시겠습니까? (예/아니오): ");
         Scanner sc = new Scanner(System.in);
 
