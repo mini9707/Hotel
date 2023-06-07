@@ -58,14 +58,16 @@ public class Hotel {
         Scanner scanner = new Scanner(System.in);
         System.out.println("예약하실 객실을 입력해주세요 ex)FAMILY_SUITE");
         String roomType = scanner.nextLine();
-        //제대로 입력햇는지 확인
+        boolean a = false;
         for(Room room : roomList){
-            if (room.getRoomSize().contains(roomType)){
+            a = room.getRoomSize().equals(roomType);
+            while(a){
                 return room;
-            } else {
-                System.out.println("잘못입력하셨습니다.");
-                inputRoom();
             }
+        }
+        if(a==false){
+            System.out.println("잘못입력하셨습니다");
+            inputRoom();
         }
         return null;
     }
