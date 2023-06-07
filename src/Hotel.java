@@ -349,8 +349,10 @@ public class Hotel {
 
             if (menu.equals("고객") || menu.equals("1")) {
                 showCustomerMenu();
+                break;
             } else if (menu.equals("호텔") || menu.equals("2")) {
                 showHotelMenu();
+                break;
             } else if (menu.equals("종료") || menu.equals("3")) {
                 System.out.println("불좀꺼조 호텔 예약 프로그램을 종료합니다.");
                 break;
