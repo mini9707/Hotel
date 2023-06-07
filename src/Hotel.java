@@ -181,7 +181,7 @@ public class Hotel {
                 // 예약 리스트에서 예약 내역 출력하기
                 for (Reservation reservation:reservationList) {
                     if (reservation.getCustomerName().equals(name) && reservation.getPhoneNumber().equals(phoneNumber)) {
-                        System.out.printf("%-4s | %-10s | %s | %s", reservation.getCustomerName(), reservation.getRoom().getRoomSize(), reservation.getReservationDate(), reservation.getId() );
+                        System.out.printf("%-4s | %-10s | %s | %s\n", reservation.getCustomerName(), reservation.getRoom().getRoomSize(), reservation.getReservationDate(), reservation.getId() );
                     } // if문 종료
                 } // for문 종료
 
@@ -253,7 +253,8 @@ public class Hotel {
             System.out.println("호텔 예약 리스트입니다. ");
             if (inputPassword.equals(password)) {
                 for (Reservation r:reservationList){
-                    System.out.println(r.getRoom().getRoomSize()+r.getRoom().getRoomCharge()+r.getCustomerName()+r.getPhoneNumber()+r.getReservationDate()+r.getId());
+                    System.out.printf("%s | %-4.1f | %-5s | %12s | %10s | %s\n", r.getRoom().getRoomSize(), r.getRoom().getRoomCharge(), r.getCustomerName(), r.getPhoneNumber(), r.getReservationDate(), r.getId());
+//                    System.out.println(r.getRoom().getRoomSize()+r.getRoom().getRoomCharge()+r.getCustomerName()+r.getPhoneNumber()+r.getReservationDate()+r.getId());
                 }
                 break;
             } else {
@@ -330,6 +331,7 @@ public class Hotel {
             System.out.println("-----메인 메뉴-----");
             System.out.println("1. 고객");
             System.out.println("2. 호텔");
+            System.out.println("3. 종료");
 
             System.out.print("메뉴를 입력해주세요: ");
             String menu = sc.nextLine();
@@ -338,11 +340,13 @@ public class Hotel {
                 showCustomerMenu();
             } else if (menu.equals("호텔") || menu.equals("2")) {
                 showHotelMenu();
+            } else if (menu.equals("종료") || menu.equals("3")){
+                System.out.println("불좀꺼조 호텔 예약 프로그램을 종료합니다.");
+                break;
             } else {
                 System.out.println("잘못된 메뉴입니다.");
             }
-        }
-
+        } // while()
     } // showMain()
 
     // 고객 세부 메뉴 출력하기
