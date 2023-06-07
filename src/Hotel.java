@@ -177,7 +177,7 @@ public class Hotel {
             } // for문 종료
 
             if (count > 0) { // 예약 건수가 하나 이상이라면
-                System.out.println("\n" +name + "님의 예약 내역 (총 +"+count+"건)을 출력합니다.");
+                System.out.println("\n" +name + "님의 예약 내역 (총 "+count+"건)을 출력합니다.");
                 // 예약 리스트에서 예약 내역 출력하기
                 for (Reservation reservation : reservationList) {
                     if (reservation.getCustomerName().equals(name) && reservation.getPhoneNumber().equals(phoneNumber)) {
