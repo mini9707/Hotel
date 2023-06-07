@@ -43,10 +43,17 @@ public class Hotel {
         Scanner scan = new Scanner(System.in);
         //yyyy년 MM월 dd일 타입으로 입력받기
         System.out.println("yyyy-MM-dd 형태로 원하시는 날짜를 입력해주세요. 예: 2023-06-05 ");
+        String pattern="\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])";
         String resDate = scan.nextLine();
+        if(!Pattern.matches(pattern,resDate)){
+            System.out.println("날짜 형식이 올바르지 않습니다.");
+            showRoomList();
+        }
+
+        System.out.println("방이름  |  가격");
         for(Room room:roomList){
             if(!room.getDateList().contains(resDate)){
-                System.out.println(room.toString());
+                System.out.printf("%-15s | %.1f\n",room.getRoomSize(),room.getRoomCharge());
             }
         }
         // 그 다음에 해당하는 날짜에 - reservationList에 없는 객실들만 출력해야 함
@@ -91,7 +98,7 @@ public class Hotel {
 
 
 
-        System.out.print("소지금을 입력해주세요: ※1은 1만원을 의미합니다.");
+        System.out.print("소지금을 입력해주세요 ※1은 1만원을 의미합니다. :  ");
         Double cash = sc.nextDouble();
 
         Customer customer = new Customer(name, phone, cash);
@@ -225,7 +232,7 @@ public class Hotel {
             System.out.println("호텔 예약 리스트입니다. ");
             if (inputPassword.equals(password)) {
                 for (Reservation r:reservationList){
-                    System.out.println(r.getRoom().getRoomSize()+r.getRoom().getRoomCharge()+r.getCustomerName()+r.getPhoneNumber()+r.getReservationDate()+r.getId());
+                    System.out.println(r.getRoom().getRoomSize()+" | "+r.getRoom().getRoomCharge()+" | "+r.getCustomerName()+" | "+r.getPhoneNumber()+" | "+r.getReservationDate()+" | "+r.getId());
                 }
                 break;
             } else {
@@ -288,7 +295,7 @@ public class Hotel {
         String pattern = "^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}$"; // 숫자만 등장하는지
         if(!Pattern.matches(pattern, inputPhone)){
             System.out.println("올바른 전화번호 형식이 아닙니다. 다시 입력해주세요");
-            InputPhoneCheck();
+            inputPhone=InputPhoneCheck();
         }
         return inputPhone;
     }
