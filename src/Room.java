@@ -17,10 +17,11 @@ public class Room {
         return roomCharge;
     }
 
-    public List<String> getDateList () {
+    public List<String> getDateList() {
         return dateList;
     }
-    public void setDateList (String date) {
+
+    public void setDateList(String date) {
         this.dateList.add(date);
     }
 
@@ -29,8 +30,4 @@ public class Room {
         this.roomCharge = roomCharge;
     }
 
-    @Override
-    public String toString() {
-        return "방 이름(크기):" + this.roomSize+" , 가격: "+this.roomCharge;
-    }
 }

@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class Hotel {
     // 방 리스트
@@ -29,6 +30,7 @@ public class Hotel {
     private List<Reservation> reservationList = new ArrayList<>();
     // 고객 리스트
     private List<Customer> customerList = new ArrayList<>();
+    // 호텔 자산
     private String asset;
 
     // 객실 리스트 출력하는 메소드
@@ -42,10 +44,17 @@ public class Hotel {
         Scanner scan = new Scanner(System.in);
         //yyyy년 MM월 dd일 타입으로 입력받기
         System.out.println("yyyy-MM-dd 형태로 원하시는 날짜를 입력해주세요. 예: 2023-06-05 ");
+        String pattern="\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])";
         String resDate = scan.nextLine();
+        if(!Pattern.matches(pattern,resDate)){
+            System.out.println("날짜 형식이 올바르지 않습니다.");
+            showRoomList();
+        }
+
+        System.out.println("방이름  |  가격");
         for(Room room:roomList){
             if(!room.getDateList().contains(resDate)){
-                System.out.println(room.toString());
+                System.out.printf("%-15s | %.1f\n",room.getRoomSize(),room.getRoomCharge());
             }
         }
         // 그 다음에 해당하는 날짜에 - reservationList에 없는 객실들만 출력해야 함
@@ -62,13 +71,13 @@ public class Hotel {
         boolean a = false;
         for(Room room : roomList){
             a = room.getRoomSize().equals(roomType);
-            while(a){
+            if (a){
                 return room;
             }
         }
         if(a == false){
             System.out.println("잘못 입력하셨습니다");
-            inputRoom();
+            return inputRoom();
         }
         return null;
     } // inputRoom()
@@ -84,10 +93,11 @@ public class Hotel {
         System.out.print("성함을 입력해주세요: ");
         String name = sc.nextLine();
 
-        System.out.print("전화번호를 입력해주세요: ");
-        String phone = sc.nextLine();
+        //System.out.print("전화번호를 입력해주세요: ");
+        //String phone = sc.nextLine();
+        String phone =InputPhoneCheck();
 
-        System.out.print("소지금을 입력해주세요: ");
+        System.out.print("소지금을 입력해주세요 ※1은 1만원을 의미합니다. :  ");
         Double cash = sc.nextDouble();
 
         Customer customer = new Customer(name, phone, cash);
@@ -146,8 +156,9 @@ public class Hotel {
         // 고객의 성함과 전화번호를 우선 입력받는다.
         System.out.print("성함을 입력해주세요: ");
         String name = sc.nextLine();
-        System.out.print("전화번호를 입력해주세요: ");
-        String phoneNumber = sc.nextLine();
+        //System.out.print("전화번호를 입력해주세요: ");
+        //String phoneNumber = sc.nextLine();
+        String phoneNumber=InputPhoneCheck();
         // 고객이 리스트에 존재할 지 판단하는 boolean 타입의 필드 선언
         boolean custo = false;
         // 고객 리스트에 해당 고객이 존재하는지 판단
@@ -232,6 +243,8 @@ public class Hotel {
     // 호텔에서 모든 예약 목록 조회 기능
     // 푸름님
     public void showAllReservation() {
+        System.out.println();
+        System.out.println("------ 호텔 페이지 ------\n");
         System.out.println("관리자 비밀번호를 입력해주세요: ");
         Scanner sc = new Scanner(System.in);
         while (true) {
@@ -278,7 +291,7 @@ public class Hotel {
                 System.out.println(e.getMessage());
             }
         }
-    }
+    } // showHotelMenu()
 
     public void setPassword() {
         System.out.print("비밀번호를 수정하시겠습니까? (예/아니오): ");
@@ -307,7 +320,7 @@ public class Hotel {
                 System.out.println(e.getMessage());
             }
         }
-    }
+    } // setPassword()
 
     // 첫 화면에서 메뉴들을 출력하는 메소드
     public void showMain() {
@@ -356,6 +369,17 @@ public class Hotel {
             System.out.println("잘못된 메뉴입니다.");
         }
     } // showCustomerMenu()
-
-
+    
+    // 전화번호 
+    private String InputPhoneCheck(){ //전화번호 정규표현식
+        Scanner scan=new Scanner(System.in);
+        System.out.print("전화번호를 입력해주세요 ex)000-0000-0000 : ");
+        String inputPhone=scan.nextLine();
+        String pattern = "^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}$"; // 숫자만 등장하는지
+        if(!Pattern.matches(pattern, inputPhone)){
+            System.out.println("올바른 전화번호 형식이 아닙니다. 다시 입력해주세요");
+            inputPhone=InputPhoneCheck();
+        }
+        return inputPhone;
+    } // InputPhoneCheck()
 }
