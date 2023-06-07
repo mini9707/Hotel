@@ -262,21 +262,18 @@ public class Hotel {
             if (inputPassword.equals(password)) {
                 if (reservationList.isEmpty()) {
                     System.out.println("예약 내역이 존재하지 않습니다.");
-                    System.out.println("메인 메뉴로 돌아갑니다.");
-                    showMain();
                 } else {
                     for (Reservation r : reservationList) {
                         System.out.printf("%s | %-4.1f | %-5s | %12s | %10s | %s\n", r.getRoom().getRoomSize(), r.getRoom().getRoomCharge(), r.getCustomerName(), r.getPhoneNumber(), r.getReservationDate(), r.getId());
 //                    System.out.println(r.getRoom().getRoomSize()+r.getRoom().getRoomCharge()+r.getCustomerName()+r.getPhoneNumber()+r.getReservationDate()+r.getId());
                     }
-                    break;
                 }
+                break;
             } else {
                 System.out.println("다시 입력해주세요.");
             }
         } // while()
         System.out.println("메인 메뉴로 돌아갑니다.");
-        showMain();
     } // showAllReservation()
 
     public void showHotelMenu() {
