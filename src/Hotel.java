@@ -9,7 +9,7 @@ public class Hotel {
     private List<Room> roomList = new ArrayList<>();
     private String password = "1234";
 
-    //Test Input용 메서드(삭제해야대)
+    //Test Input용 메서드
     //CHARGE 단위 1.0*10000
     public void init() {
         roomList = Arrays.asList(
@@ -59,17 +59,19 @@ public class Hotel {
         Scanner scanner = new Scanner(System.in);
         System.out.println("예약하실 객실을 입력해주세요 ex)FAMILY_SUITE");
         String roomType = scanner.nextLine();
-        //제대로 입력햇는지 확인
+        boolean a = false;
         for(Room room : roomList){
-            if (room.getRoomSize().contains(roomType)){
+            a = room.getRoomSize().equals(roomType);
+            while(a){
                 return room;
-            } else {
-                System.out.println("잘못입력하셨습니다.");
-                inputRoom();
             }
         }
+        if(a==false){
+            System.out.println("잘못입력하셨습니다");
+            inputRoom();
+        }
         return null;
-    }
+    } // inputRoom()
 
     // 고객 정보를 입력받는 메소드
     // 고객 정보를 입력 받아서 있으면 그냥 진행하고, 없으면 고객 리스트에 추가하기
@@ -85,7 +87,7 @@ public class Hotel {
         System.out.print("전화번호를 입력해주세요: ");
         String phone = sc.nextLine();
 
-        System.out.print("소지금를 입력해주세요: ");
+        System.out.print("소지금을 입력해주세요: ");
         Double cash = sc.nextDouble();
 
         Customer customer = new Customer(name, phone, cash);
@@ -173,18 +175,16 @@ public class Hotel {
     // 예약을 삭제하는 메소드
     public void deleteReservation() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("예약 내역을 삭제하시겠습니까?(예/아니오): ");
+        System.out.println("\n예약 내역을 삭제하시겠습니까?(예/아니오): ");
         String yesNo = sc.nextLine();
         if (yesNo.equals("예")) {
             System.out.print("예약 번호를 입력해주세요: ");
             String reservationNum = sc.nextLine();
             Boolean yesOrNo = false;
-
+            Reservation r = null;
             for (Reservation reservation:reservationList) {
                 if (reservation.getId().equals(reservationNum)) {
-                    reservationList.remove(reservation);
-                    Room removeroom = reservation.getRoom();
-                    removeroom.getDateList().remove(reservation.getReservationDate());
+                    r = reservation;
                     yesOrNo = true;
                 } // if문 종료
             } // for문 종료
@@ -192,6 +192,10 @@ public class Hotel {
             if (!yesOrNo) {
                 System.out.println("잘못된 예약 번호입니다.");
             } else {
+                reservationList.remove(r);
+                Room removeroom = r.getRoom();
+                removeroom.getDateList().remove(r.getReservationDate());
+                yesOrNo = true;
                 System.out.println("예약이 삭제되었습니다.");
             }
 
