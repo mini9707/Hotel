@@ -1,4 +1,4 @@
-![header](https://capsule-render.vercel.app/api?type=wave&color=auto&height=300&section=header&text=불좀꺼조&fontSize=90)
+![header](https://capsule-render.vercel.app/api?type=wave&color=auto&height=250&section=header&text=불좀꺼조&fontSize=80)
 ## 🎇 불좀꺼조
 🏨 Spring_6기 A반 1조 호텔 예약 프로그램 🏨
 
