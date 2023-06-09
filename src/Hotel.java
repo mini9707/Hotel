@@ -13,7 +13,7 @@ public class Hotel {
     // 고객 리스트
     private List<Customer> customerList = new ArrayList<>();
     // 호텔 자산
-    private String asset;
+//     private String asset;
     // 호텔 관리자 비밀번호
     private String password = "1234";
 
